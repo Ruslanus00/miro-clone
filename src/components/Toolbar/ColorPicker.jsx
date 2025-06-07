@@ -1,0 +1,11 @@
+export default function ColorPicker({ color, onChange }) {
+  return (
+    <input
+      type="color"
+      value={color}
+      onChange={(e) => onChange(e.target.value)}
+      className="w-10 h-10 rounded"
+      title="Color"
+    />
+  );
+}
