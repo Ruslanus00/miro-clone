@@ -14,7 +14,9 @@ export default function MiroCloneBoard() {
     handleUndo,
     handleClear,
     setCurrentTool,
-    setDrawingStyle
+    setDrawingStyle,
+    exportJSON,
+    importJSON
   } = useFabricCanvas(tool, color, lineWidth);
 
   const handleToolChange = (newTool) => {
@@ -32,6 +34,28 @@ export default function MiroCloneBoard() {
     setDrawingStyle(color, width);
   };
 
+  const handleExport = () => {
+    const data = exportJSON();
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'board.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImport = (file) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const json = e.target?.result;
+      if (typeof json === 'string') {
+        importJSON(json);
+      }
+    };
+    reader.readAsText(file);
+  };
+
   return (
     <div>
       <Toolbar
@@ -44,6 +68,8 @@ export default function MiroCloneBoard() {
         onColorChange={handleColorChange}
         lineWidth={lineWidth}
         onLineWidthChange={handleLineWidthChange}
+        onExport={handleExport}
+        onImport={handleImport}
       />
       <div className="relative w-full h-screen">
         <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full z-0" />
