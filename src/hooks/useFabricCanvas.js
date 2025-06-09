@@ -119,6 +119,36 @@ export default function useFabricCanvas(tool, color = "#000000", lineWidth = 2, 
           });
           canvas.add(rect);
           canvas.setActiveObject(rect);
+        } else if (toolRef.current === "circle") {
+          const circle = new fabric.Circle({
+            left: x,
+            top: y,
+            radius: 50,
+            fill: "#ddeeff",
+            stroke: color,
+            strokeWidth: lineWidth,
+          });
+          canvas.add(circle);
+          canvas.setActiveObject(circle);
+        } else if (toolRef.current === "line") {
+          const line = new fabric.Line([x, y, x + 100, y], {
+            stroke: color,
+            strokeWidth: lineWidth,
+          });
+          canvas.add(line);
+          canvas.setActiveObject(line);
+        } else if (toolRef.current === "triangle") {
+          const tri = new fabric.Triangle({
+            left: x,
+            top: y,
+            width: 80,
+            height: 80,
+            fill: "#ddeeff",
+            stroke: color,
+            strokeWidth: lineWidth,
+          });
+          canvas.add(tri);
+          canvas.setActiveObject(tri);
         } else if (toolRef.current === "arrow") {
           const arrow = new fabric.Line([x, y, x + 60, y], {
             stroke: color,
@@ -255,6 +285,20 @@ export default function useFabricCanvas(tool, color = "#000000", lineWidth = 2, 
     objectsToRemove.forEach(obj => canvas.remove(obj));
   };
 
+  const exportJSON = () => {
+    const canvas = fabricRef.current;
+    if (!canvas) return '';
+    return JSON.stringify(canvas.toJSON());
+  };
+
+  const importJSON = (json) => {
+    const canvas = fabricRef.current;
+    if (!canvas) return;
+    canvas.loadFromJSON(json, () => {
+      canvas.renderAll();
+    });
+  };
+
   return {
     canvasRef,
     zoom,
@@ -262,5 +306,7 @@ export default function useFabricCanvas(tool, color = "#000000", lineWidth = 2, 
     handleClear,
     setCurrentTool,
     setDrawingStyle,
+    exportJSON,
+    importJSON,
   };
 }

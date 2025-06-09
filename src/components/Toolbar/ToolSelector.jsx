@@ -1,5 +1,5 @@
 export default function ToolSelector({ currentTool, onToolChange }) {
-  const tools = ["draw", "text", "arrow", "rect"];
+  const tools = ["draw", "text", "arrow", "rect", "circle", "line", "triangle"];
 
   return (
     <select
